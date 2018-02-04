@@ -532,8 +532,9 @@ PlayerSettings:
   il2cppCompilerConfiguration: {}
   incrementalIl2cppBuild: {}
   additionalIl2CppArgs: 
-  scriptingRuntimeVersion: 0
-  apiCompatibilityLevelPerPlatform: {}
+  scriptingRuntimeVersion: 1
+  apiCompatibilityLevelPerPlatform:
+    Standalone: 6
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
   metroPackageName: stellar-account-viewer
@@ -609,8 +610,8 @@ PlayerSettings:
       daydreamIconForeground: {fileID: 0}
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled: {}
-  facebookSdkVersion: 
-  apiCompatibilityLevel: 2
+  facebookSdkVersion: 7.9.4
+  apiCompatibilityLevel: 3
   cloudProjectId: 
   projectName: 
   organizationId: 
