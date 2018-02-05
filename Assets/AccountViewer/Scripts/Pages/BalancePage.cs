@@ -72,7 +72,7 @@ public class BalancePage : Page
 	{
 		//Instantiate Prefab
 		GameObject assetInstance = Instantiate(assetPrefab);
-		assetInstance.transform.SetParent(assetsParent);
+		assetInstance.transform.SetParent(assetsParent, false);
 
 		//Set Data
 		UIAsset uiAsset = assetInstance.GetComponent<UIAsset>();
