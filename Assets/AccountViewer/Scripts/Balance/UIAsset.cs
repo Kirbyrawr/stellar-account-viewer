@@ -54,7 +54,16 @@ public class UIAsset : MonoBehaviour
 
 	private void UpdateLabel() 
 	{
-		//Set Balance Label
-		label.text = string.Concat(Balance.BalanceString, Balance.AssetCode);
+		//Native Asset
+		if(balance.AssetType == "native") 
+		{
+			label.text = string.Concat(Balance.BalanceString, " ", "XLM");
+		}
+
+		//Non Native Asset
+		else 
+		{
+			label.text = string.Concat(Balance.BalanceString, " ", Balance.AssetCode);
+		}
 	}
 }

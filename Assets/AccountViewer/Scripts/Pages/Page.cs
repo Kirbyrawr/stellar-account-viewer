@@ -28,7 +28,7 @@ public abstract class Page : MonoBehaviour {
 	public void Hide() 
 	{
 		canvasGroup.alpha = 0f;
-		canvasGroup.interactable = true;
-		canvasGroup.blocksRaycasts = true;
+		canvasGroup.interactable = false;
+		canvasGroup.blocksRaycasts = false;
 	}
 }
