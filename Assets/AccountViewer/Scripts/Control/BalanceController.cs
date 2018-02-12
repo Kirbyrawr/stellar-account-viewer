@@ -5,13 +5,15 @@ using stellar_dotnetcore_sdk;
 using stellar_dotnetcore_sdk.responses;
 
 
-namespace AccountViewer.Controller
+namespace AccountViewer.Controller.Balances
 {
     public class BalanceController : MonoBehaviour
     {
         private MainController mainController;
         private Dictionary<string, Balance> balanceDictionary = new Dictionary<string, Balance>();
 
+        public System.Action<string, Balance> OnAddBalance;
+        public System.Action<string, Balance> OnUpdateBalance;
 
         public void Start()
         {
@@ -21,7 +23,7 @@ namespace AccountViewer.Controller
 
         private void SubscribeEvents()
         {
-            mainController.accounts.OnUpdateAccountData += OnUpdateAccountData;
+            mainController.accounts.OnLoadAccountData += OnUpdateAccountData;
         }
 
         private void OnUpdateAccountData(AccountResponse accountResponse)
@@ -48,14 +50,14 @@ namespace AccountViewer.Controller
                 if (balanceDictionary.ContainsKey(assetID))
                 {
                     balanceDictionary[balance.AssetCode] = balance;
-                    //OnUpdateBalance(assetID, balance);
+                    OnUpdateBalance(assetID, balance);
                 }
 
                 //If we don't have the asset already added.
                 else
                 {
                     balanceDictionary.Add(assetID, balance);
-                    //InstantiateUIAsset(assetID, balance);
+                    OnAddBalance(assetID, balance);
                 }
             }
         }

@@ -1082,7 +1082,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00005114061}
+  m_AnchoredPosition: {x: 0, y: 0.00006456261}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &471627364
@@ -1373,8 +1373,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 520919312}
   m_HandleRect: {fileID: 520919311}
   m_Direction: 2
-  m_Value: 0.99999803
-  m_Size: 0.17386366
+  m_Value: 0.9999972
+  m_Size: 0.16704577
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2181,7 +2181,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0.03668262, y: -180.60007}
-  m_SizeDelta: {x: -55.9, y: -1835}
+  m_SizeDelta: {x: -55.9, y: -1835.6}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1041096718
 CanvasRenderer:
@@ -2232,6 +2232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transparency: {fileID: 321140862}
+  headerLabel: {fileID: 428124683}
   accountObjectPrefab: {fileID: 1261096540297098, guid: 06179adafb8714da7a51cfc3d67bb313,
     type: 2}
   accountsListRect: {fileID: 1041096717}
@@ -2543,7 +2544,7 @@ Prefab:
     - target: {fileID: 224833951891987212, guid: 977df1eaac1bb6e4d8e632ac4248870b,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -346.2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224833951891987212, guid: 977df1eaac1bb6e4d8e632ac4248870b,
         type: 2}
@@ -2592,6 +2593,10 @@ Prefab:
     - target: {fileID: 1257030351731978, guid: 977df1eaac1bb6e4d8e632ac4248870b, type: 2}
       propertyPath: m_Name
       value: Header
+      objectReference: {fileID: 0}
+    - target: {fileID: 1381602729123868, guid: 977df1eaac1bb6e4d8e632ac4248870b, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 977df1eaac1bb6e4d8e632ac4248870b, type: 2}
@@ -2656,7 +2661,7 @@ Prefab:
     - target: {fileID: 224833951891987212, guid: 977df1eaac1bb6e4d8e632ac4248870b,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -1095.9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224833951891987212, guid: 977df1eaac1bb6e4d8e632ac4248870b,
         type: 2}

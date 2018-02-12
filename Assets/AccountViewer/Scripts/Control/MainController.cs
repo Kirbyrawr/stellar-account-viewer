@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UStellar.Core;
 using stellar_dotnetcore_sdk;
+using AccountViewer.Controller.Accounts;
+using AccountViewer.Controller.Balances;
 
 namespace AccountViewer.Controller
 {
@@ -11,6 +13,7 @@ namespace AccountViewer.Controller
         private static MainController instance;
 
         public AccountsController accounts;
+        public BalanceController balance;
         public Server server;
 
         private void Awake()

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
-using AccountViewer.Controller;
+using AccountViewer.Controller.Accounts;
 
 namespace AccountViewer.UI.Accounts
 {
     public class UIAccountsList : UIModule
     {
+        public Text headerLabel;
         public GameObject accountObjectPrefab;
         public RectTransform accountsListRect;
         public Transform scrollContent;
@@ -20,6 +21,7 @@ namespace AccountViewer.UI.Accounts
         {
             base.Start();
             uiController.mainController.accounts.OnAddAccount += OnAddAccount;
+            uiController.mainController.accounts.OnSetAccount += OnSetAccount;
         }
 
         public void OnClickAccountList()
@@ -50,9 +52,15 @@ namespace AccountViewer.UI.Accounts
             HideTransparency();
         }
 
+        //Callbacks
         private void OnAddAccount(AccountsController.AccountSV account)
         {
             InstantiateAccountsObject(account);
+        }
+
+        private void OnSetAccount(AccountsController.AccountSV account)
+        {
+            headerLabel.text = account.name;
         }
 
         private void InstantiateAccountsObject(AccountsController.AccountSV account) 

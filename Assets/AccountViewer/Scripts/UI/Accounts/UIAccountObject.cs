@@ -1,21 +1,36 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using AccountViewer.Controller;
 using UnityEngine;
 using UnityEngine.UI;
+using AccountViewer.Controller.Accounts;
 
-public class UIAccountObject : MonoBehaviour
+namespace AccountViewer.UI.Accounts
 {
-    public Text nameLabel;
-    public Text addressLabel;
-
-    [System.NonSerialized]
-    public AccountsController.AccountSV account;
-
-    public void Setup(AccountsController.AccountSV account)
+    public class UIAccountObject : MonoBehaviour
     {
-        this.account = account;
-        nameLabel.text = account.name;
-        addressLabel.text = account.address;
+        public Text nameLabel;
+        public Text addressLabel;
+
+        [System.NonSerialized]
+        public AccountsController.AccountSV account;
+
+        private UIController uiController;
+        private UIAccountsList uiAccountsList;
+
+        public void Setup(AccountsController.AccountSV account)
+        {
+            uiController = UIController.GetInstance();
+            uiAccountsList = uiController.GetModule<UIAccountsList>();
+
+            this.account = account;
+            nameLabel.text = account.name;
+            addressLabel.text = account.address;
+        }
+
+        public void OnClick()
+        {
+            uiController.mainController.accounts.SetAccount(account);
+            uiAccountsList.CloseList();
+        }
     }
 }

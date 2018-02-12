@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using stellar_dotnetcore_sdk.responses;
 using stellar_dotnetcore_sdk;
+using Newtonsoft.Json;
 
-namespace AccountViewer.Controller
+namespace AccountViewer.Controller.Accounts
 {
     public class AccountsController : MonoBehaviour
     {
@@ -14,22 +15,25 @@ namespace AccountViewer.Controller
         {
             public string name;
             public string address;
+
+            [JsonIgnore]
             public Account data;
         }
 
         public List<AccountSV> accounts;
         public AccountSV currentAccount;
 
-        private MainController controller;
-
         //Callbacks
         public System.Action<AccountSV> OnAddAccount;
+        public System.Action<AccountSV> OnSetAccount;
         public System.Action<AccountResponse> OnLoadAccountData;
         public System.Action<AccountResponse> OnUpdateAccountData;
 
+        private MainController mainController;
+
         private void Start()
         {
-            controller = MainController.GetInstance();
+            mainController = MainController.GetInstance();
             LoadAccountsData();
         }
 
@@ -43,22 +47,35 @@ namespace AccountViewer.Controller
 
         public void AddAccount(string name, string address)
         {
-            AccountSV accountToAdd = new AccountSV();
-            accountToAdd.name = name;
-            accountToAdd.address = address;
-            accounts.Add(accountToAdd);
-            OnAddAccount(accountToAdd);
+            AccountSV account = new AccountSV();
+            account.name = name;
+            account.address = address;
+            accounts.Add(account);
+
+            //Serialize
+            DataSerializer.SerializeAccount(account);
+
+            if (OnAddAccount != null)
+            {
+                OnAddAccount(account);
+            }
         }
 
         public void SetAccount(AccountSV account)
         {
             currentAccount = account;
+            LoadAccountData(account);
+
+            if (OnSetAccount != null)
+            {
+                OnSetAccount(account);
+            }
         }
-        
+
         public async void LoadAccountData(AccountSV accountSV)
         {
             KeyPair accountKeyPair = KeyPair.FromAccountId(accountSV.address);
-            AccountResponse accountResponse = await controller.server.Accounts.Account(accountKeyPair);
+            AccountResponse accountResponse = await mainController.server.Accounts.Account(accountKeyPair);
             accountSV.data = new Account(accountResponse.KeyPair, accountResponse.SequenceNumber);
 
             if (OnLoadAccountData != null)
@@ -70,7 +87,7 @@ namespace AccountViewer.Controller
         public async void UpdateAccountData(AccountSV accountSV)
         {
             KeyPair accountKeyPair = KeyPair.FromAccountId(accountSV.address);
-            AccountResponse accountResponse = await controller.server.Accounts.Account(accountKeyPair);
+            AccountResponse accountResponse = await mainController.server.Accounts.Account(accountKeyPair);
             accountSV.data = new Account(accountResponse.KeyPair, accountResponse.SequenceNumber);
 
             if (OnUpdateAccountData != null)

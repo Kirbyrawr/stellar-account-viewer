@@ -4,19 +4,20 @@ using UnityEngine;
 using stellar_dotnetcore_sdk;
 using stellar_dotnetcore_sdk.responses;
 using UnityEngine.UI;
+using AccountViewer.Controller.Balances;
 
-namespace AccountViewer.UI
+namespace AccountViewer.UI.Balances
 {
-    public class UIAsset : MonoBehaviour
+    public class UIBalanceObject : MonoBehaviour
     {
         [ReadOnly]
         public string id;
 
         public Text label;
 
-        //Balance
-        private UIBalance uiBalance;
+        private BalanceController balanceController;
 
+        //Balance
         public Balance Balance
         {
             get
@@ -35,8 +36,8 @@ namespace AccountViewer.UI
 
         public void Setup(string assetID, Balance assetBalance)
         {
-            //Set UIBalance instance;
-            //balanceController = MainController.GetInstance();
+            //Easy Instance
+            balanceController = UIController.GetInstance().mainController.balance;
 
             //Set ID
             id = assetID;
@@ -44,8 +45,8 @@ namespace AccountViewer.UI
             //Set Balance
             Balance = assetBalance;
 
-            //Subscribe to Balance updates
-            //balanceController.OnUpdateBalance += OnUpdateBalance;
+            //Subscribe to callbacks
+            balanceController.OnUpdateBalance += OnUpdateBalance;
         }
 
         public void OnUpdateBalance(string assetID, Balance assetBalance)
