@@ -5,6 +5,7 @@ using UStellar.Core;
 using stellar_dotnetcore_sdk;
 using AccountViewer.Controller.Accounts;
 using AccountViewer.Controller.Balances;
+using AccountViewer.Controller.Operations;
 
 namespace AccountViewer.Controller
 {
@@ -14,6 +15,8 @@ namespace AccountViewer.Controller
 
         public AccountsController accounts;
         public BalanceController balance;
+        public OperationsController operations;
+        
         public Server server;
 
         private void Awake()

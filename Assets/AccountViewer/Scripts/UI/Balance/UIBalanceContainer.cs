@@ -9,35 +9,34 @@ namespace AccountViewer.UI.Balances
     public class UIBalanceContainer : UIModule
     {
         public Transform contentParent;
-        public GameObject balanceObjectPrefab;
+        public GameObject assetPrefab;
 
         private BalanceController balanceController;
-        private Dictionary<string, UIBalanceObject> balanceObjects = new Dictionary<string, UIBalanceObject>();
+        private Dictionary<string, UIAsset> assetsDictionary = new Dictionary<string, UIAsset>();
 
-        public override void Start() 
+        protected override void Setup() 
         {
-            base.Start();
             balanceController = UIController.GetInstance().mainController.balance;
-            balanceController.OnAddBalance += OnAddBalance;
+            balanceController.OnAddAsset += OnAddAsset;
         }
 
-        private void OnAddBalance(string id, Balance balance) 
+        private void OnAddAsset(string id, Balance balance) 
         {
-            InstantiateBalanceObject(id, balance);
+            CreateAsset(id, balance);
         }
 
-        private void InstantiateBalanceObject(string id, Balance balance)
+        private void CreateAsset(string id, Balance balance)
         {
             //Instantiate Prefab
-            GameObject assetInstance = Instantiate(balanceObjectPrefab);
+            GameObject assetInstance = Instantiate(assetPrefab);
             assetInstance.transform.SetParent(contentParent, false);
 
             //Set Data
-            UIBalanceObject balanceObject = assetInstance.GetComponent<UIBalanceObject>();
-            balanceObject.Setup(id, balance);
+            UIAsset uiAsset = assetInstance.GetComponent<UIAsset>();
+            uiAsset.Setup(id, balance);
 
             //Add this to the dictionary
-            balanceObjects.Add(id, balanceObject);
+            assetsDictionary.Add(id, uiAsset);
         }
     }
 }

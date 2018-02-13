@@ -11,21 +11,20 @@ namespace AccountViewer.Controller.Accounts
     public class AccountsController : MonoBehaviour
     {
         [System.Serializable]
-        public class AccountSV
+        public class Account
         {
             public string name;
             public string address;
 
             [JsonIgnore]
-            public Account data;
+            public stellar_dotnetcore_sdk.Account data;
         }
 
-        public List<AccountSV> accounts;
-        public AccountSV currentAccount;
+        public List<Account> accounts;
+        public Account currentAccount;
 
-        //Callbacks
-        public System.Action<AccountSV> OnAddAccount;
-        public System.Action<AccountSV> OnSetAccount;
+        public System.Action<Account> OnAddAccount;
+        public System.Action<Account> OnSetAccount;
         public System.Action<AccountResponse> OnLoadAccountData;
         public System.Action<AccountResponse> OnUpdateAccountData;
 
@@ -47,7 +46,7 @@ namespace AccountViewer.Controller.Accounts
 
         public void AddAccount(string name, string address)
         {
-            AccountSV account = new AccountSV();
+            Account account = new Account();
             account.name = name;
             account.address = address;
             accounts.Add(account);
@@ -61,10 +60,10 @@ namespace AccountViewer.Controller.Accounts
             }
         }
 
-        public void SetAccount(AccountSV account)
+        public void SetAccount(Account account)
         {
             currentAccount = account;
-            LoadAccountData(account);
+            UpdateAccountData(account);
 
             if (OnSetAccount != null)
             {
@@ -72,11 +71,11 @@ namespace AccountViewer.Controller.Accounts
             }
         }
 
-        public async void LoadAccountData(AccountSV accountSV)
+        public async void LoadAccountData(Account accountSV)
         {
             KeyPair accountKeyPair = KeyPair.FromAccountId(accountSV.address);
             AccountResponse accountResponse = await mainController.server.Accounts.Account(accountKeyPair);
-            accountSV.data = new Account(accountResponse.KeyPair, accountResponse.SequenceNumber);
+            accountSV.data = new stellar_dotnetcore_sdk.Account(accountResponse.KeyPair, accountResponse.SequenceNumber);
 
             if (OnLoadAccountData != null)
             {
@@ -84,11 +83,11 @@ namespace AccountViewer.Controller.Accounts
             }
         }
 
-        public async void UpdateAccountData(AccountSV accountSV)
+        public async void UpdateAccountData(Account account)
         {
-            KeyPair accountKeyPair = KeyPair.FromAccountId(accountSV.address);
+            KeyPair accountKeyPair = KeyPair.FromAccountId(account.address);
             AccountResponse accountResponse = await mainController.server.Accounts.Account(accountKeyPair);
-            accountSV.data = new Account(accountResponse.KeyPair, accountResponse.SequenceNumber);
+            account.data = new stellar_dotnetcore_sdk.Account(accountResponse.KeyPair, accountResponse.SequenceNumber);
 
             if (OnUpdateAccountData != null)
             {

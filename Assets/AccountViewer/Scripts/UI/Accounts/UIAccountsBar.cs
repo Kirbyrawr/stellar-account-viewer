@@ -7,19 +7,23 @@ using AccountViewer.Controller.Accounts;
 
 namespace AccountViewer.UI.Accounts
 {
-    public class UIAccountsList : UIModule
+    public class UIAccountsBar : UIModule
     {
         public Text headerLabel;
-        public GameObject accountObjectPrefab;
+        public GameObject accountPrefab;
         public RectTransform accountsListRect;
-        public Transform scrollContent;
+        public Transform contentParent;
 
         private bool listOpened = false;
-        private Dictionary<string, UIAccountObject> accountsObjects = new Dictionary<string, UIAccountObject>();
+        private Dictionary<string, UIAccount> accountsObjects = new Dictionary<string, UIAccount>();
 
-        public override void Start()
+        protected override void Setup()
         {
-            base.Start();
+            SubscribeEvents();
+        }
+
+        private void SubscribeEvents()
+        {
             uiController.mainController.accounts.OnAddAccount += OnAddAccount;
             uiController.mainController.accounts.OnSetAccount += OnSetAccount;
         }
@@ -40,8 +44,6 @@ namespace AccountViewer.UI.Accounts
         {
             listOpened = true;
             accountsListRect.DOSizeDelta(new Vector2(accountsListRect.sizeDelta.x, -1190f), 0.4f).SetEase(Ease.InOutSine);
-
-            //Transparency
             ShowTransparency();
         }
 
@@ -53,30 +55,31 @@ namespace AccountViewer.UI.Accounts
         }
 
         //Callbacks
-        private void OnAddAccount(AccountsController.AccountSV account)
+        private void OnAddAccount(AccountsController.Account account)
         {
-            InstantiateAccountsObject(account);
+            CreateAccount(account);
         }
 
-        private void OnSetAccount(AccountsController.AccountSV account)
+        private void OnSetAccount(AccountsController.Account account)
         {
             headerLabel.text = account.name;
         }
 
-        private void InstantiateAccountsObject(AccountsController.AccountSV account) 
+        private void CreateAccount(AccountsController.Account account)
         {
             //Instantiate Prefab
-            GameObject accountObjectInstance = Instantiate(accountObjectPrefab);
-            accountObjectInstance.transform.SetParent(scrollContent, false);
+            GameObject accountObjectInstance = Instantiate(accountPrefab);
+            accountObjectInstance.transform.SetParent(contentParent, false);
 
             //Set Data
-            UIAccountObject uiAccountObject = accountObjectInstance.GetComponent<UIAccountObject>();
+            UIAccount uiAccountObject = accountObjectInstance.GetComponent<UIAccount>();
             uiAccountObject.Setup(account);
 
             //Add this to the dictionary
             accountsObjects.Add(account.name, uiAccountObject);
         }
 
+        //Called from Scene
         public void OnClickAddAccount()
         {
             UIAddAccount addAccountModule = UIController.GetInstance().GetModule<UIAddAccount>();

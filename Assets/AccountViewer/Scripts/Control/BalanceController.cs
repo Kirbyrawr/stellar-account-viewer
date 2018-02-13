@@ -9,13 +9,18 @@ namespace AccountViewer.Controller.Balances
 {
     public class BalanceController : MonoBehaviour
     {
-        private MainController mainController;
-        private Dictionary<string, Balance> balanceDictionary = new Dictionary<string, Balance>();
+        public System.Action<string, Balance> OnAddAsset;
+        public System.Action<string, Balance> OnUpdateAsset;
 
-        public System.Action<string, Balance> OnAddBalance;
-        public System.Action<string, Balance> OnUpdateBalance;
+        private MainController mainController;
+        private Dictionary<string, Balance> assetsDictionary = new Dictionary<string, Balance>();
 
         public void Start()
+        {
+            Setup();
+        }
+
+        private void Setup() 
         {
             mainController = MainController.GetInstance();
             SubscribeEvents();
@@ -23,7 +28,7 @@ namespace AccountViewer.Controller.Balances
 
         private void SubscribeEvents()
         {
-            mainController.accounts.OnLoadAccountData += OnUpdateAccountData;
+            mainController.accounts.OnUpdateAccountData += OnUpdateAccountData;
         }
 
         private void OnUpdateAccountData(AccountResponse accountResponse)
@@ -32,32 +37,32 @@ namespace AccountViewer.Controller.Balances
 
             for (int i = 0; i < balances.Length; i++)
             {
-                Balance balance = balances[i];
+                Balance asset = balances[i];
 
                 string assetID = null;
 
-                if (balance.AssetType == "native")
+                if (asset.AssetType == "native")
                 {
                     assetID = "native";
                 }
 
                 else
                 {
-                    assetID = balance.AssetCode + balance.AssetIssuer.AccountId;
+                    assetID = asset.AssetCode + asset.AssetIssuer.AccountId;
                 }
 
                 //If we have the asset already added.
-                if (balanceDictionary.ContainsKey(assetID))
+                if (assetsDictionary.ContainsKey(assetID))
                 {
-                    balanceDictionary[balance.AssetCode] = balance;
-                    OnUpdateBalance(assetID, balance);
+                    assetsDictionary[asset.AssetCode] = asset;
+                    OnUpdateAsset(assetID, asset);
                 }
 
                 //If we don't have the asset already added.
                 else
                 {
-                    balanceDictionary.Add(assetID, balance);
-                    OnAddBalance(assetID, balance);
+                    assetsDictionary.Add(assetID, asset);
+                    OnAddAsset(assetID, asset);
                 }
             }
         }

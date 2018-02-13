@@ -8,7 +8,7 @@ using AccountViewer.Controller.Balances;
 
 namespace AccountViewer.UI.Balances
 {
-    public class UIBalanceObject : MonoBehaviour
+    public class UIAsset : MonoBehaviour
     {
         [ReadOnly]
         public string id;
@@ -34,26 +34,28 @@ namespace AccountViewer.UI.Balances
 
         private Balance balance;
 
-        public void Setup(string assetID, Balance assetBalance)
+        public void Setup(string id, Balance balance)
         {
             //Easy Instance
             balanceController = UIController.GetInstance().mainController.balance;
 
             //Set ID
-            id = assetID;
+            this.id = id;
 
             //Set Balance
-            Balance = assetBalance;
+            Balance = balance;
 
             //Subscribe to callbacks
-            balanceController.OnUpdateBalance += OnUpdateBalance;
+            balanceController.OnUpdateAsset += OnUpdateBalance;
         }
 
-        public void OnUpdateBalance(string assetID, Balance assetBalance)
+        public void OnUpdateBalance(string id, Balance balance)
         {
-            //Check if this asset changed;
-            if (id != assetID) { return; }
-            Balance = assetBalance;
+            //Check if this asset changed
+            if (this.id != id) 
+            {
+                Balance = balance;
+            }
         }
 
         private void UpdateLabel()

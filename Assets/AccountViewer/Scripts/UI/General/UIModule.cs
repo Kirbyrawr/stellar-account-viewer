@@ -13,16 +13,19 @@ namespace AccountViewer.UI
 
 		protected const float animationSpeed = 0.4f;
 
-		public virtual void Start() 
+		private void Start() 
 		{
+			InitialSetup();
 			Setup();
 		}
 
-		private void Setup() 
+		private void InitialSetup() 
 		{
 			uiController = UIController.GetInstance();
 			uiController.AddModule(this);
 		}
+
+		protected virtual void Setup(){}
 
 		#region Transparency
         public void ShowTransparency(float fadeTime = animationSpeed, TweenCallback onComplete = null) 

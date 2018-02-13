@@ -6,31 +6,32 @@ using AccountViewer.Controller.Accounts;
 
 namespace AccountViewer.UI.Accounts
 {
-    public class UIAccountObject : MonoBehaviour
+    public class UIAccount : MonoBehaviour
     {
         public Text nameLabel;
         public Text addressLabel;
 
         [System.NonSerialized]
-        public AccountsController.AccountSV account;
+        public AccountsController.Account account;
 
-        private UIController uiController;
-        private UIAccountsList uiAccountsList;
+        private UIController controller;
+        private UIAccountsBar accountsList;
 
-        public void Setup(AccountsController.AccountSV account)
+        public void Setup(AccountsController.Account account)
         {
-            uiController = UIController.GetInstance();
-            uiAccountsList = uiController.GetModule<UIAccountsList>();
+            controller = UIController.GetInstance();
+            accountsList = controller.GetModule<UIAccountsBar>();
 
             this.account = account;
             nameLabel.text = account.name;
             addressLabel.text = account.address;
         }
 
+        //Called from Scene
         public void OnClick()
         {
-            uiController.mainController.accounts.SetAccount(account);
-            uiAccountsList.CloseList();
+            controller.mainController.accounts.SetAccount(account);
+            accountsList.CloseList();
         }
     }
 }

@@ -10,7 +10,7 @@ public class DataSerializer : MonoBehaviour
 {
 	public static string currentJSON;
 
-	public static void SerializeAccount(AccountsController.AccountSV account) 
+	public static void SerializeAccount(AccountsController.Account account) 
 	{
 		string json = JsonConvert.SerializeObject(account, Formatting.Indented);
 	}
