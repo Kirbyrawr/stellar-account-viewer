@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using stellar_dotnetcore_sdk;
 using UnityEngine.UI;
 using AccountViewer.Controller.Operations;
@@ -18,9 +19,9 @@ namespace AccountViewer.UI.Operations
 
         private OperationsController operationsController;
 
-        private OperationResponse operation;
+        private OperationResponse operationResponse;
 
-        public void Setup(long id, OperationResponse operation)
+        public void Setup(long id, OperationResponse operationResponse)
         {
             //Easy Instance
             operationsController = UIController.GetInstance().mainController.operations;
@@ -29,10 +30,16 @@ namespace AccountViewer.UI.Operations
             this.id = id;
 
             //Set Balance
-            this.operation = operation;
+            this.operationResponse = operationResponse;
             
-            operationLabel.text = operation.Type;
-            sourceAccount.text = operation.SourceAccount.AccountId;
+            operationLabel.text = operationResponse.Type;
+            sourceAccount.text = operationResponse.SourceAccount.AccountId;
+        }
+
+        private void SetLabelData() 
+        {
+            OperationType operationType = operationsController.GetOperationResponseOperationType(operationResponse);
+
         }
     }
 }
