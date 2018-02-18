@@ -43,14 +43,14 @@ namespace AccountViewer.UI.Accounts
         public void OpenList()
         {
             listOpened = true;
-            accountsListRect.DOSizeDelta(new Vector2(accountsListRect.sizeDelta.x, -1190f), 0.4f).SetEase(Ease.InOutSine);
+            accountsListRect.DOSizeDelta(new Vector2(accountsListRect.sizeDelta.x, 766f), 0.4f).SetEase(Ease.InOutSine);
             ShowTransparency();
         }
 
         public void CloseList()
         {
             listOpened = false;
-            accountsListRect.DOSizeDelta(new Vector2(accountsListRect.sizeDelta.x, -1835f), 0.4f).SetEase(Ease.InOutSine);
+            accountsListRect.DOSizeDelta(new Vector2(accountsListRect.sizeDelta.x, 84f), 0.4f).SetEase(Ease.InOutSine);
             HideTransparency();
         }
 

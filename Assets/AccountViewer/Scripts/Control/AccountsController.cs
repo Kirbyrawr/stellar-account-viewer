@@ -52,7 +52,7 @@ namespace AccountViewer.Controller.Accounts
             accounts.Add(account);
 
             //Serialize
-            DataSerializer.SerializeAccount(account);
+            //DataSerializer.SerializeAccount(account);
 
             if (OnAddAccount != null)
             {

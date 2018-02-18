@@ -13,22 +13,22 @@ namespace AccountViewer.Controller.Operations
 {
     public enum OperationType
     {
-        AccountMerge,
-        AllowTrust,
-        ChangeTrust,
-        CreateAccount,
-        CreatePassiveOffer,
-        Inflation,
-        ManageData,
-        ManageOffer,
-        PathPayment,
-        Payment,
-        SetOptions
+        CREATE_ACCOUNT = 0,
+        PAYMENT = 1,
+        PATH_PAYMENT = 2,
+        MANAGE_OFFER = 3,
+        CREATE_PASSIVE_OFFER = 4,
+        SET_OPTIONS = 5,
+        CHANGE_TRUST = 6,
+        ALLOW_TRUST = 7,
+        ACCOUNT_MERGE = 8,
+        INFLATION = 9,
+        MANAGE_DATA = 10
     }
 
     public class OperationsController : MonoBehaviour
     {
-        public System.Action<OperationResponse> OnAddOperation;
+        public System.Action<TransactionResponse, OperationResponse> OnAddOperation;
         private MainController mainController;
 
         //Operations
@@ -47,25 +47,23 @@ namespace AccountViewer.Controller.Operations
 
         private void SubscribeEvents()
         {
-            mainController.accounts.OnUpdateAccountData += OnUpdateAccountData;
+            mainController.transactions.OnAddTransaction += OnAddTransaction;
         }
 
-        private void OnUpdateAccountData(AccountResponse response)
+        private void OnAddTransaction(TransactionResponse response)
         {
-            GetOperations(mainController.accounts.currentAccount);
+            GetOperations(response);
         }
 
-        private async void GetOperations(AccountsController.Account account)
+        private async void GetOperations(TransactionResponse transactionResponse)
         {
-            Page<OperationResponse> operationsPage = await mainController.server.Operations.ForAccount(account.data.KeyPair).Execute();
+            Page<OperationResponse> operationsPage = await mainController.server.Operations.ForTransaction(transactionResponse.Hash).Order(OrderDirection.ASC).Execute();
 
-            var a = (PaymentOperationResponse)operationsPage.Records[0];
-
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < operationsPage.Records.Count; i++)
             {
                 if (OnAddOperation != null)
                 {
-                    OnAddOperation(operationsPage.Records[i]);
+                    OnAddOperation(transactionResponse, operationsPage.Records[i]);
                 }
             }
         }
@@ -86,47 +84,47 @@ namespace AccountViewer.Controller.Operations
 
         public OperationType GetOperationResponseOperationType(OperationResponse operationResponse)
         {
-            OperationType type = (OperationType)Enum.Parse(typeof(OperationType), operationResponse.Type);
+            OperationType type = (OperationType)Enum.Parse(typeof(OperationType), operationResponse.Type, true);
             return type;
         }
 
         public Type GetOperationResponseType(OperationResponse operationResponse)
         {
-            OperationType type = (OperationType)Enum.Parse(typeof(OperationType), operationResponse.Type);
+            OperationType type = (OperationType)Enum.Parse(typeof(OperationType), operationResponse.Type, true);
 
             switch (type)
             {
-                case OperationType.AccountMerge:
+                case OperationType.ACCOUNT_MERGE:
                     return typeof(AccountMergeOperationResponse);
 
-                case OperationType.AllowTrust:
+                case OperationType.ALLOW_TRUST:
                     return typeof(AllowTrustOperationResponse);
 
-                case OperationType.ChangeTrust:
+                case OperationType.CHANGE_TRUST:
                     return typeof(ChangeTrustOperationResponse);
 
-                case OperationType.CreateAccount:
+                case OperationType.CREATE_ACCOUNT:
                     return typeof(CreateAccountOperationResponse);
 
-                case OperationType.CreatePassiveOffer:
+                case OperationType.CREATE_PASSIVE_OFFER:
                     return typeof(CreatePassiveOfferOperationResponse);
 
-                case OperationType.Inflation:
+                case OperationType.INFLATION:
                     return typeof(InflationOperationResponse);
 
-                case OperationType.ManageOffer:
+                case OperationType.MANAGE_OFFER:
                     return typeof(ManageOfferOperationResponse);
 
-                case OperationType.ManageData:
+                case OperationType.MANAGE_DATA:
                     return typeof(ManageDataOperationResponse);
 
-                case OperationType.PathPayment:
+                case OperationType.PATH_PAYMENT:
                     return typeof(PathPaymentOperationResponse);
 
-                case OperationType.Payment:
+                case OperationType.PAYMENT:
                     return typeof(PaymentOperationResponse);
 
-                case OperationType.SetOptions:
+                case OperationType.SET_OPTIONS:
                     return typeof(SetOptionsOperationResponse);
             }
 
