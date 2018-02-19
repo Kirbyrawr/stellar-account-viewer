@@ -4,6 +4,7 @@ using UnityEngine;
 using stellar_dotnetcore_sdk;
 using stellar_dotnetcore_sdk.responses;
 
+using AccountViewer.Controller.Accounts;
 
 namespace AccountViewer.Controller.Balances
 {
@@ -28,7 +29,13 @@ namespace AccountViewer.Controller.Balances
 
         private void SubscribeEvents()
         {
+            mainController.accounts.OnSetAccount += OnSetAccount;
             mainController.accounts.OnUpdateAccountData += OnUpdateAccountData;
+        }
+
+        private void OnSetAccount(AccountsController.Account account) 
+        {
+            assetsDictionary.Clear();
         }
 
         private void OnUpdateAccountData(AccountResponse accountResponse)

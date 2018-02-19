@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using AccountViewer.Controller.Operations;
 using stellar_dotnetcore_sdk;
 using stellar_dotnetcore_sdk.responses.operations;
 using stellar_dotnetcore_sdk.responses;
+
+using AccountViewer.Controller;
+using AccountViewer.Controller.Accounts;
+using AccountViewer.Controller.Operations;
 
 namespace AccountViewer.UI.Operations
 {
@@ -13,13 +16,24 @@ namespace AccountViewer.UI.Operations
         public Transform contentParent;
         public GameObject operationPrefab;
 
-        private OperationsController operationsController;
-        private Dictionary<long, OperationResponse> operations = new Dictionary<long, OperationResponse>();
+        private MainController mainController;
+        private Dictionary<long, UIOperation> operations = new Dictionary<long, UIOperation>();
 
         protected override void Setup() 
         {
-            operationsController = UIController.GetInstance().mainController.operations;
-            operationsController.OnAddOperation += OnAddOperation;
+            mainController = UIController.GetInstance().mainController;
+            mainController.accounts.OnSetAccount += OnSetAccount;
+            mainController.operations.OnAddOperation += OnAddOperation;
+        }
+
+        private void OnSetAccount(AccountsController.Account account) 
+        {
+            foreach (var pair in operations)
+            {
+                Destroy(pair.Value.gameObject);
+            }
+
+            operations.Clear();
         }
 
         private void OnAddOperation(TransactionResponse transactionResponse, OperationResponse operationResponse) 
@@ -38,7 +52,7 @@ namespace AccountViewer.UI.Operations
             uiOperation.Setup(operation.Id, transaction, operation);
 
             //Add this to the dictionary
-            operations.Add(operation.Id, operation);
+            operations.Add(operation.Id, uiOperation);
         }
     }
 }

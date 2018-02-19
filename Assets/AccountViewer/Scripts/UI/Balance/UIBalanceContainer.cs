@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using stellar_dotnetcore_sdk.responses;
+using AccountViewer.Controller;
 using AccountViewer.Controller.Balances;
+using AccountViewer.Controller.Accounts;
 
 namespace AccountViewer.UI.Balances
 {
@@ -11,18 +13,29 @@ namespace AccountViewer.UI.Balances
         public Transform contentParent;
         public GameObject assetPrefab;
 
-        private BalanceController balanceController;
+        private MainController mainController;
         private Dictionary<string, UIAsset> assetsDictionary = new Dictionary<string, UIAsset>();
 
         protected override void Setup() 
         {
-            balanceController = UIController.GetInstance().mainController.balance;
-            balanceController.OnAddAsset += OnAddAsset;
+            mainController = UIController.GetInstance().mainController;
+            mainController.balance.OnAddAsset += OnAddAsset;
+            mainController.accounts.OnSetAccount += OnSetAccount;
         }
 
         private void OnAddAsset(string id, Balance balance) 
         {
             CreateAsset(id, balance);
+        }
+
+        private void OnSetAccount(AccountsController.Account account) 
+        {
+            foreach (var pair in assetsDictionary)
+            {
+                Destroy(pair.Value.gameObject);
+            }
+
+            assetsDictionary.Clear();
         }
 
         private void CreateAsset(string id, Balance balance)

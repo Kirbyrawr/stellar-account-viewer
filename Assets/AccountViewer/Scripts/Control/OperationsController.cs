@@ -29,9 +29,8 @@ namespace AccountViewer.Controller.Operations
     public class OperationsController : MonoBehaviour
     {
         public System.Action<TransactionResponse, OperationResponse> OnAddOperation;
-        private MainController mainController;
 
-        //Operations
+        private MainController mainController;
         private Dictionary<string, OperationResponse> operations = new Dictionary<string, OperationResponse>();
 
         public void Start()
@@ -47,8 +46,14 @@ namespace AccountViewer.Controller.Operations
 
         private void SubscribeEvents()
         {
+            mainController.accounts.OnSetAccount += OnSetAccount;
             mainController.transactions.OnAddTransaction += OnAddTransaction;
         }
+
+        private void OnSetAccount(AccountsController.Account account)
+        {
+            operations.Clear();
+        } 
 
         private void OnAddTransaction(TransactionResponse response)
         {

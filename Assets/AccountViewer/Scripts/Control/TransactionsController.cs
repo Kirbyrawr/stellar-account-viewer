@@ -31,7 +31,13 @@ namespace AccountViewer.Controller.Transactions
 
         private void SubscribeEvents()
         {
+            mainController.accounts.OnSetAccount += OnSetAccount;
             mainController.accounts.OnUpdateAccountData += OnUpdateAccountData;
+        }
+
+        private void OnSetAccount(AccountsController.Account account) 
+        {
+            transactions.Clear();
         }
 
         private void OnUpdateAccountData(AccountResponse response)
