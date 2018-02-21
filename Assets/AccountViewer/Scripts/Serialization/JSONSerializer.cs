@@ -13,6 +13,7 @@ public class JSONSerializer : MonoBehaviour
 
 	public static void Init() 
 	{
+		LoadJSON();
 		SetupJSON();
 		SetupDataDirectory();
 	}
@@ -48,46 +49,48 @@ public class JSONSerializer : MonoBehaviour
 		else
 		{
         	accounts = new JArray();
-			json.Add("", accounts);
+			json.Add("accounts", accounts);
 		}
 
 		//Add Account
-		JObject accountToAdd = new JObject();
-		accountToAdd.Add("name", new JProperty("name", account.name));
-		accountToAdd.Add("address", new JProperty("address", account.address));
+		JObject accountToAdd = JObject.FromObject(account);
 		accounts.Add(accountToAdd);
 		
 		//Serialize JSON
 		currentJSON = JsonConvert.SerializeObject(json, Formatting.Indented);
 
-		Debug.Log(currentJSON);
-
 		//Save JSON
 		SaveJSON();
     }
 
-    /*
+	public static List<AccountsController.Account> DeserializeAccounts() 
 	{
-		"accounts": 
-		[
-			{
-				"name": "Account1",
-				"address": "1"
-			},
+		List<AccountsController.Account> accountsList = new List<AccountsController.Account>();
 
+		//Deserialize JSON
+        JObject json = JObject.Parse(currentJSON);
+
+		//Check if the array exist
+		if(json["accounts"] != null) 
+		{
+        	JArray accounts = (JArray)json.GetValue("accounts");
+
+			for (int i = 0; i < accounts.Count; i++)
 			{
-				"name": "Account2",
-				"address": "2"
+				AccountsController.Account account = new AccountsController.Account();
+				account.name = accounts[i].SelectToken("name").ToString();
+				account.address = accounts[i].SelectToken("address").ToString();
+				accountsList.Add(account);
 			}
-		]
-	} */
+		}
 
-	
+		return accountsList;
+	}
+
 
     public static void LoadJSON()
     {
-        string path = string.Concat(Application.persistentDataPath, "/Data/Data.lumen");
-        string json = File.ReadAllText(path);
+        currentJSON = File.ReadAllText(GetJSONPath());
     }
 
     public static void SaveJSON()

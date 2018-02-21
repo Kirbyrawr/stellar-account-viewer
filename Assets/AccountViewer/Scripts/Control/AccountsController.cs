@@ -33,7 +33,18 @@ namespace AccountViewer.Controller.Accounts
         private void Start()
         {
             mainController = MainController.GetInstance();
+            Deserialize();
             LoadAccountsData();
+        }
+
+        private void Deserialize() 
+        {
+            accounts = JSONSerializer.DeserializeAccounts();
+            Debug.Log(accounts.Count);
+            for (int i = 0; i < accounts.Count; i++)
+            {
+                OnAddAccount(accounts[i]);
+            }
         }
 
         private void LoadAccountsData()
