@@ -24,6 +24,7 @@ namespace AccountViewer.Controller
         private void Awake()
         {
             SetInstance();
+            JSONSerializer.Init();
             InitStellarSDK();
         }
 
