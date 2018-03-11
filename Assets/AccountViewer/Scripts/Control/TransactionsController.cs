@@ -13,7 +13,7 @@ namespace AccountViewer.Controller.Transactions
     public class TransactionsController : MonoBehaviour
     {
         public System.Action<TransactionResponse> OnAddTransaction;
-        private MainController mainController;
+        private MainController main;
 
         //Operations
         private Dictionary<string, TransactionResponse> transactions = new Dictionary<string, TransactionResponse>();
@@ -25,14 +25,14 @@ namespace AccountViewer.Controller.Transactions
 
         private void Setup()
         {
-            mainController = MainController.GetInstance();
+            main = MainController.GetInstance();
             SubscribeEvents();
         }
 
         private void SubscribeEvents()
         {
-            mainController.accounts.OnSetAccount += OnSetAccount;
-            mainController.accounts.OnUpdateAccountData += OnUpdateAccountData;
+            main.accounts.OnSetAccount += OnSetAccount;
+            main.accounts.OnUpdateAccountData += OnUpdateAccountData;
         }
 
         private void OnSetAccount(AccountsController.Account account) 
@@ -42,12 +42,12 @@ namespace AccountViewer.Controller.Transactions
 
         private void OnUpdateAccountData(AccountResponse response)
         {
-            GetTransactions(mainController.accounts.currentAccount);
+            GetTransactions(main.accounts.currentAccount);
         }
 
         private async void GetTransactions(AccountsController.Account account)
         {
-            Page<TransactionResponse> transactionsPage = await mainController.server.Transactions.ForAccount(account.data.KeyPair).Order(OrderDirection.DESC).Execute();
+            Page<TransactionResponse> transactionsPage = await main.networks.server.Transactions.ForAccount(account.data.KeyPair).Order(OrderDirection.DESC).Execute();
 
             for (int i = 0; i < 5; i++)
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using AccountViewer.Controller;
 
 namespace AccountViewer.UI
 {
@@ -12,6 +13,7 @@ namespace AccountViewer.UI
 		public Image transparency;
 
 		protected const float animationSpeed = 0.4f;
+		protected MainController mainController;
 
 		private void Start() 
 		{
@@ -23,6 +25,7 @@ namespace AccountViewer.UI
 		{
 			uiController = UIController.GetInstance();
 			uiController.AddModule(this);
+			mainController = uiController.mainController;
 		}
 
 		protected virtual void Setup(){}

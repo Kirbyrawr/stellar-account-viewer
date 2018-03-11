@@ -12,13 +12,10 @@ namespace AccountViewer.UI.Balances
     {
         public Transform contentParent;
         public GameObject assetPrefab;
-
-        private MainController mainController;
         private Dictionary<string, UIAsset> assetsDictionary = new Dictionary<string, UIAsset>();
 
         protected override void Setup() 
         {
-            mainController = UIController.GetInstance().mainController;
             mainController.balance.OnAddAsset += OnAddAsset;
             mainController.accounts.OnSetAccount += OnSetAccount;
         }

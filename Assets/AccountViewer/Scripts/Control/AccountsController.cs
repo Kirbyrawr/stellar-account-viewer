@@ -24,15 +24,16 @@ namespace AccountViewer.Controller.Accounts
         public Account currentAccount;
 
         public System.Action<Account> OnAddAccount;
+        public System.Action<Account> OnEditAccount;
         public System.Action<Account> OnSetAccount;
         public System.Action<AccountResponse> OnLoadAccountData;
         public System.Action<AccountResponse> OnUpdateAccountData;
 
-        private MainController mainController;
+        private MainController main;
 
         private void Start()
         {
-            mainController = MainController.GetInstance();
+            main = MainController.GetInstance();
             LoadAccountsData();
         }
 
@@ -59,6 +60,20 @@ namespace AccountViewer.Controller.Accounts
                 OnAddAccount(account);
             }
         }
+        
+        public void EditAccount(Account account, string name, string address) 
+        {
+            account.name = name;
+            account.address = address;
+
+            //Serialize
+            //DataSerializer.SerializeAccount(account);
+
+            if (OnEditAccount != null)
+            {
+                OnEditAccount(account);
+            }
+        }
 
         public void SetAccount(Account account)
         {
@@ -74,7 +89,7 @@ namespace AccountViewer.Controller.Accounts
         public async void LoadAccountData(Account accountSV)
         {
             KeyPair accountKeyPair = KeyPair.FromAccountId(accountSV.address);
-            AccountResponse accountResponse = await mainController.server.Accounts.Account(accountKeyPair);
+            AccountResponse accountResponse = await main.networks.server.Accounts.Account(accountKeyPair);
             accountSV.data = new stellar_dotnetcore_sdk.Account(accountResponse.KeyPair, accountResponse.SequenceNumber);
 
             if (OnLoadAccountData != null)
@@ -86,7 +101,7 @@ namespace AccountViewer.Controller.Accounts
         public async void UpdateAccountData(Account account)
         {
             KeyPair accountKeyPair = KeyPair.FromAccountId(account.address);
-            AccountResponse accountResponse = await mainController.server.Accounts.Account(accountKeyPair);
+            AccountResponse accountResponse = await main.networks.server.Accounts.Account(accountKeyPair);
             account.data = new stellar_dotnetcore_sdk.Account(accountResponse.KeyPair, accountResponse.SequenceNumber);
 
             if (OnUpdateAccountData != null)

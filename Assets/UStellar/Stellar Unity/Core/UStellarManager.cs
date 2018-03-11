@@ -14,55 +14,67 @@ namespace UStellar.Core
 {
     public class UStellarManager
     {
-        //Parameters
-        private static string network = "";
-        private static Server server;
-        private static string network_passphrase = "Test SDF Network ; September 2015";
+        private static Network network = null;
+        private static Server server = null;
 
-        //Test
-        public static bool test = true;
-
-        public static void Init()
+        public static void Init(bool debug = true)
         {
-            //Workaround of Unity
+            //Workaround of Unity.
             ServicePointManager.ServerCertificateValidationCallback = MyRemoteCertificateValidationCallback;
 
-            //Set Stellar Data
-            SetNetwork();
+            //Enable/Disable Debug.
+            UStellarDebug.SetDebug(debug);
+
+            UStellarDebug.Debug(string.Concat("Stellar SDK Init"));
+
+            //Check if Network is null for give a simple warning.
+            if (network == null)
+            {
+                UStellarDebug.Debug("Network is not setup, please set the one from Stellar or a custom one", DebugType.Warning);
+            }
         }
 
-        public static void SetNetwork()
+        public static void SetStellarPublicNetwork()
         {
-            if (test)
-            {
-                network = "test";
-                stellar_dotnetcore_sdk.Network.UseTestNetwork();
-                server = new Server("https://horizon-testnet.stellar.org");
-            }
-            else
-            {
-                network = "public";
-                stellar_dotnetcore_sdk.Network.UsePublicNetwork();
-            }
+            Network network = new Network(UStellarUtils.STELLAR_PUBLIC_NETWORK_PASSPHRASE);
+            Server server = new Server(UStellarUtils.STELLAR_PUBLIC_SERVER_URL);
+            SetNetwork(network, server);
         }
 
-		public static Server GetServer() 
-		{
-			return server;
-		}
-
-        public static bool IsTestNetwork()
+        public static void SetStellarTestNetwork()
         {
-            if (network == "test")
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            Network network = new Network(UStellarUtils.STELLAR_TEST_NETWORK_PASSPHRASE);
+            Server server = new Server(UStellarUtils.STELLAR_TEST_SERVER_URL);
+            SetNetwork(network, server);
         }
-		
+
+        public static Network GetNetwork()
+        {
+            return network;
+        }
+
+        public static void SetNetwork(Network network, Server server)
+        {
+            UStellarManager.network = network;
+            stellar_dotnetcore_sdk.Network.Use(network);
+
+            UStellarDebug.Debug(string.Concat("Network Setup", Environment.NewLine,
+                                              "Passphrase: ", network.NetworkPassphrase), DebugType.Info);
+
+            SetServer(server);
+        }
+
+        public static Server GetServer()
+        {
+            return server;
+        }
+
+        public static void SetServer(Server server)
+        {
+            UStellarManager.server = server;
+
+            UStellarDebug.Debug("Server Setup", DebugType.Info);
+        }
 
         //Workaround... I don't like this and needs to be changed.
         public static bool MyRemoteCertificateValidationCallback(System.Object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)

@@ -25,6 +25,7 @@ namespace AccountViewer.UI.Accounts
         private void SubscribeEvents()
         {
             uiController.mainController.accounts.OnAddAccount += OnAddAccount;
+            uiController.mainController.accounts.OnEditAccount += OnEditAccount;
             uiController.mainController.accounts.OnSetAccount += OnSetAccount;
         }
 
@@ -57,6 +58,12 @@ namespace AccountViewer.UI.Accounts
         //Callbacks
         private void OnAddAccount(AccountsController.Account account)
         {
+            Debug.Log("Click");
+            CreateAccount(account);
+        }
+
+        private void OnEditAccount(AccountsController.Account account)
+        {
             CreateAccount(account);
         }
 
@@ -68,22 +75,28 @@ namespace AccountViewer.UI.Accounts
         private void CreateAccount(AccountsController.Account account)
         {
             //Instantiate Prefab
-            GameObject accountObjectInstance = Instantiate(accountPrefab);
-            accountObjectInstance.transform.SetParent(contentParent, false);
+            GameObject accountInstance = Instantiate(accountPrefab);
+            accountInstance.transform.SetParent(contentParent, false);
 
             //Set Data
-            UIAccount uiAccountObject = accountObjectInstance.GetComponent<UIAccount>();
-            uiAccountObject.Setup(account);
+            UIAccount uiAccount = accountInstance.GetComponent<UIAccount>();
+            uiAccount.Setup(account);
 
             //Add this to the dictionary
-            accountsObjects.Add(account.name, uiAccountObject);
+            accountsObjects.Add(account.name, uiAccount);
+        }
+
+        private void EditAccount(AccountsController.Account account)
+        {     
+            UIAccount uiAccount = accountsObjects[account.name];
+            uiAccount.Refresh();
         }
 
         //Called from Scene
         public void OnClickAddAccount()
         {
-            UIAddAccount addAccountModule = UIController.GetInstance().GetModule<UIAddAccount>();
-            addAccountModule.Show();
+            UIAccountInput accountInput = UIController.GetInstance().GetModule<UIAccountInput>();
+            accountInput.AddAccount();
         }
     }
 }

@@ -30,7 +30,7 @@ namespace AccountViewer.Controller.Operations
     {
         public System.Action<TransactionResponse, OperationResponse> OnAddOperation;
 
-        private MainController mainController;
+        private MainController main;
         private Dictionary<string, OperationResponse> operations = new Dictionary<string, OperationResponse>();
 
         public void Start()
@@ -40,14 +40,14 @@ namespace AccountViewer.Controller.Operations
 
         private void Setup()
         {
-            mainController = MainController.GetInstance();
+            main = MainController.GetInstance();
             SubscribeEvents();
         }
 
         private void SubscribeEvents()
         {
-            mainController.accounts.OnSetAccount += OnSetAccount;
-            mainController.transactions.OnAddTransaction += OnAddTransaction;
+            main.accounts.OnSetAccount += OnSetAccount;
+            main.transactions.OnAddTransaction += OnAddTransaction;
         }
 
         private void OnSetAccount(AccountsController.Account account)
@@ -62,7 +62,7 @@ namespace AccountViewer.Controller.Operations
 
         private async void GetOperations(TransactionResponse transactionResponse)
         {
-            Page<OperationResponse> operationsPage = await mainController.server.Operations.ForTransaction(transactionResponse.Hash).Order(OrderDirection.ASC).Execute();
+            Page<OperationResponse> operationsPage = await main.networks.server.Operations.ForTransaction(transactionResponse.Hash).Order(OrderDirection.ASC).Execute();
 
             for (int i = 0; i < operationsPage.Records.Count; i++)
             {
