@@ -58,13 +58,12 @@ namespace AccountViewer.UI.Accounts
         //Callbacks
         private void OnAddAccount(AccountsController.Account account)
         {
-            Debug.Log("Click");
             CreateAccount(account);
         }
 
         private void OnEditAccount(AccountsController.Account account)
         {
-            CreateAccount(account);
+            //
         }
 
         private void OnSetAccount(AccountsController.Account account)

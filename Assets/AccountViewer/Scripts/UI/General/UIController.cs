@@ -12,6 +12,8 @@ namespace AccountViewer.UI
     {
         private static UIController instance;
         public MainController mainController;
+
+        public Canvas inputCanvas;
         
         private Dictionary<System.Type, UIModule> modules = new Dictionary<System.Type, UIModule>();
 

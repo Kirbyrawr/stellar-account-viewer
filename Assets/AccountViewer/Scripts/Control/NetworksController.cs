@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using StellarSDK = stellar_dotnetcore_sdk;
 
 public class NetworksController : MonoBehaviour {
 
@@ -31,6 +32,7 @@ public class NetworksController : MonoBehaviour {
 		}
 	}
 
+	public StellarSDK.Server server;
 	public List<Network> networks = new List<Network>();
 
 	public void AddNetwork(Network network) 

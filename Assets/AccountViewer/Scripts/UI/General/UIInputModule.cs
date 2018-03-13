@@ -10,16 +10,22 @@ public abstract class UIInputModule : UIModule
     public enum Mode { Add, Edit }
 
     public abstract string inputName { get; }
+
+	[Header("Generic")]
     public CanvasGroup canvasGroup;
     public Text titleLabel;
     public Text okLabel;
 
     protected void Show(Mode mode)
     {
+		//Canvas
+		uiController.inputCanvas.enabled = true;
+
         //Transparency
         ShowTransparency();
+		transparency.GetComponent<Button>().onClick.AddListener(Hide);
 
-        //Canvas
+        //Canvas Group
         canvasGroup.SetInteractable(true);
         canvasGroup.DOFade(1, animationSpeed);
 
@@ -39,17 +45,23 @@ public abstract class UIInputModule : UIModule
 
     protected void Hide()
     {
+		//Canvas
+		uiController.inputCanvas.enabled = false;
+
         //Transparency
+		transparency.GetComponent<Button>().onClick.RemoveAllListeners();
         HideTransparency();
 
-        //Canvas
+        //Canvas Group
         canvasGroup.SetInteractable(false);
         canvasGroup.DOFade(0, animationSpeed);
     }
 
-	protected abstract void OnClickAdd();
+	public abstract void OnClickAdd();
 
-	protected abstract void OnClickEdit();
+	public abstract void OnClickEdit();
 
     protected abstract bool IsDataValid();
+
+	protected abstract void Reset();
 }
