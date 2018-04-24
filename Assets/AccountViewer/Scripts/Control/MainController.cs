@@ -40,5 +40,11 @@ namespace AccountViewer.Controller
                 Destroy(this);
             }
         }
+
+        void Start() 
+        {
+            UStellar.Core.UStellarManager.SetStellarTestNetwork();
+            UStellar.Core.UStellarManager.Init();
+        }
     }
 }

@@ -36,11 +36,6 @@ public abstract class UIOperationData : MonoBehaviour
 
 	public virtual void BasicSetup() 
 	{
-		//Set UI
-		Canvas.ForceUpdateCanvases();
-		showSize = new Vector2(uiOperation.rectTransform.sizeDelta.x, Height);
-		hideSize = new Vector2(uiOperation.rectTransform.sizeDelta.x, 140f);
-
 		//Set Data
 		operationResponse = uiOperation.GetOperationResponse();
 		transactionResponse = uiOperation.GetTransactionResponse();
@@ -53,28 +48,4 @@ public abstract class UIOperationData : MonoBehaviour
 	}
 
 	public abstract void SetupDetails();
-
-	public virtual void Show() 
-	{
-		showing = true;
-		uiOperation.rectTransform.DOSizeDelta(showSize, 0.1f).OnUpdate(delegate {GetComponentInParent<VerticalLayoutGroup>().SetLayoutVertical();});
-	}
-
-	public virtual void Hide() 
-	{
-		showing = false;
-		uiOperation.rectTransform.DOSizeDelta(hideSize, 0.1f).OnUpdate(delegate {GetComponentInParent<VerticalLayoutGroup>().SetLayoutVertical();});;
-	}
-
-	public virtual void Toggle() 
-	{
-		if(!showing) 
-		{
-			Show();
-		}
-		else 
-		{
-			Hide();
-		}
-	}
 }
