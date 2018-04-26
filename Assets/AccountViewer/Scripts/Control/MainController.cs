@@ -12,9 +12,9 @@ namespace AccountViewer.Controller
     {
         private static MainController instance;
         
-        public NetworksController networks;
         public AccountsController accounts;
         public BalanceController balance;
+        public NetworksController networks;
         public TransactionsController transactions;
         public OperationsController operations;
 
@@ -45,6 +45,7 @@ namespace AccountViewer.Controller
         {
             UStellar.Core.UStellarManager.SetStellarTestNetwork();
             UStellar.Core.UStellarManager.Init();
+            networks.server = UStellar.Core.UStellarManager.GetServer();
         }
     }
 }

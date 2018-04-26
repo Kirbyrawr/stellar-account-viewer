@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using stellar_dotnetcore_sdk.responses;
 using stellar_dotnetcore_sdk;
 using Newtonsoft.Json;
+using UStellar.Core;
 
 namespace AccountViewer.Controller.Accounts
 {
@@ -101,7 +102,7 @@ namespace AccountViewer.Controller.Accounts
         public async void UpdateAccountData(Account account)
         {
             KeyPair accountKeyPair = KeyPair.FromAccountId(account.address);
-            AccountResponse accountResponse = await main.networks.server.Accounts.Account(accountKeyPair);
+            AccountResponse accountResponse = await UStellarManager.GetServer().Accounts.Account(accountKeyPair);
             account.data = new stellar_dotnetcore_sdk.Account(accountResponse.KeyPair, accountResponse.SequenceNumber);
 
             if (OnUpdateAccountData != null)

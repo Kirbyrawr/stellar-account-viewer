@@ -44,7 +44,7 @@ public abstract class UIOperationData : MonoBehaviour
 	public virtual void SetupOverview() 
 	{
 		//Set Date
-		uiOperation.dateLabel.text = System.DateTime.Parse(transactionResponse.CreatedAt).ToShortDateString();
+		uiOperation.dateLabel.text ="";//= System.DateTime.Parse(transactionResponse.CreatedAt).ToShortDateString();
 	}
 
 	public abstract void SetupDetails();

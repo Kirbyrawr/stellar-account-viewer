@@ -138,6 +138,7 @@ namespace AccountViewer.UI.Operations {
                     {
                         amountLabel.text = string.Concat (paymentOperation.Amount, " ", paymentOperation.AssetCode);
                     }
+                    dateLabel.text = GetDateFormatted(transactionResponse.CreatedAt);
                     break;
 
                 case OperationType.SET_OPTIONS:
@@ -147,6 +148,69 @@ namespace AccountViewer.UI.Operations {
                     dateLabel.text = transactionResponse.CreatedAt;
                     break;
             }
+        }
+
+        private string GetDateFormatted(string date) 
+        {
+            DateTime dateTime = DateTime.Parse(date);
+            string day = dateTime.Day.ToString();
+            string month = "";
+
+            switch(dateTime.Month) 
+            {
+                case 1:
+                    month = "JAN";
+                    break;
+
+                case 2:
+                    month = "FEB";
+                    break;
+
+                case 3:
+                    month = "MAR";
+                    break;
+
+                case 4:
+                    month = "APR";
+                    break;
+
+                case 5:
+                    month = "MAY";
+                    break;
+
+                case 6:
+                    month = "JUN";
+                    break;
+
+                case 7:
+                    month = "JUL";
+                    break;
+                
+                case 8:
+                    month = "AUG";
+                    break;
+
+                case 9:
+                    month = "SEP";
+                    break;
+
+                case 10:
+                    month = "OCT";
+                    break;
+
+                case 11:
+                    month = "NOV";
+                    break;
+                
+                case 12:
+                    month = "DEC";
+                    break;
+            }
+
+            string formattedDate = string.Concat(day, System.Environment.NewLine,
+                                                 month);
+
+            return formattedDate;
         }
     }
 }

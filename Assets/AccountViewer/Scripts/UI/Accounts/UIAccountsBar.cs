@@ -13,6 +13,7 @@ namespace AccountViewer.UI.Accounts
         public GameObject accountPrefab;
         public RectTransform accountsListRect;
         public Transform contentParent;
+        public CanvasGroup canvasGroup;
 
         private bool listOpened = false;
         private Dictionary<string, UIAccount> accountsObjects = new Dictionary<string, UIAccount>();
@@ -44,14 +45,22 @@ namespace AccountViewer.UI.Accounts
         public void OpenList()
         {
             listOpened = true;
-            accountsListRect.DOSizeDelta(new Vector2(accountsListRect.sizeDelta.x, 766f), 0.4f).SetEase(Ease.InOutSine);
+            canvasGroup.alpha = 1;
+            canvasGroup.SetInteractable(true);
+            Sequence sequence = DOTween.Sequence();
+            sequence.Append(accountsListRect.DOSizeDelta(new Vector2(accountsListRect.sizeDelta.x, 766f), 0.4f).SetEase(Ease.InOutSine));
+            sequence.Insert(0.1f, canvasGroup.DOFade(1, 0.05f).SetEase(Ease.InOutSine));
             ShowTransparency();
         }
 
         public void CloseList()
         {
             listOpened = false;
-            accountsListRect.DOSizeDelta(new Vector2(accountsListRect.sizeDelta.x, 84f), 0.4f).SetEase(Ease.InOutSine);
+            canvasGroup.SetInteractable(false);
+
+            Sequence sequence = DOTween.Sequence();
+            sequence.Append(accountsListRect.DOSizeDelta(new Vector2(accountsListRect.sizeDelta.x, 84f), 0.4f).SetEase(Ease.InOutSine));
+            sequence.Insert(0.3f, canvasGroup.DOFade(0, 0.05f).SetEase(Ease.InOutSine));
             HideTransparency();
         }
 
