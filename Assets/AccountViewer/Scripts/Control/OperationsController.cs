@@ -55,20 +55,23 @@ namespace AccountViewer.Controller.Operations
             operations.Clear();
         } 
 
-        private void OnAddTransaction(TransactionResponse response)
+        private void OnAddTransaction(List<TransactionResponse> responses)
         {
-            GetOperations(response);
+            GetOperations(responses);
         }
 
-        private async void GetOperations(TransactionResponse transactionResponse)
+        private async void GetOperations(List<TransactionResponse> transactionResponse)
         {
-            Page<OperationResponse> operationsPage = await main.networks.server.Operations.ForTransaction(transactionResponse.Hash).Order(OrderDirection.ASC).Execute();
-
-            for (int i = 0; i < operationsPage.Records.Count; i++)
+            for (int i = 0; i < transactionResponse.Count; i++)
             {
-                if (OnAddOperation != null)
+                Page<OperationResponse> operationsPage = await main.networks.server.Operations.ForTransaction(transactionResponse[i].Hash).Order(OrderDirection.DESC).Execute();
+                
+                for (int r = 0; r < operationsPage.Records.Count; r++)
                 {
-                    OnAddOperation(transactionResponse, operationsPage.Records[i]);
+                    if (OnAddOperation != null)
+                    {
+                        OnAddOperation(transactionResponse[i], operationsPage.Records[r]);
+                    }
                 }
             }
         }

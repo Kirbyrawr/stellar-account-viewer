@@ -42,8 +42,10 @@ namespace AccountViewer.UI.Operations
         {
             //Instantiate Prefab
             GameObject operationInstance = Instantiate(operationPrefab);
+            operationInstance.name = transaction.CreatedAt;
             operationInstance.transform.SetParent(contentParent, false);
-
+            operationInstance.transform.SetAsLastSibling();
+            
             //Set Data
             UIOperation uiOperation = operationInstance.GetComponent<UIOperation>();
             uiOperation.Setup(operation.Id, transaction, operation);

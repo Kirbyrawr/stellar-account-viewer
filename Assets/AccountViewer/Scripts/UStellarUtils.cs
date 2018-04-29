@@ -4,6 +4,8 @@ using UnityEngine;
 using stellar_dotnetcore_sdk;
 using stellar_dotnetcore_sdk.responses;
 using stellar_dotnetcore_sdk.requests;
+using System;
+using System.Xml;
 
 public static class UStellarUtils
 {   
@@ -18,5 +20,11 @@ public static class UStellarUtils
     {
         string addressShortened = addressShortened = string.Concat(address.Substring(0, 5), "...", address.Substring(address.Length - 5, 5));
         return addressShortened;
+    }
+
+    public static DateTime FormatDate(string date) 
+    {
+        DateTime formattedDate = DateTime.Parse(date, null).ToUniversalTime();
+        return formattedDate;
     }
 }

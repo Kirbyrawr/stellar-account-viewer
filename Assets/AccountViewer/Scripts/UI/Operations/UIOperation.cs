@@ -59,63 +59,64 @@ namespace AccountViewer.UI.Operations {
                     var accountMergeOperation = (AccountMergeOperationResponse) operationResponse;
                     typeLabel.text = "Account Merge";
                     detailsLabel.text = string.Concat ("");
-                    dateLabel.text = transactionResponse.CreatedAt;
+                    dateLabel.text = GetDateFormatted(transactionResponse.CreatedAt);
                     break;
 
                 case OperationType.ALLOW_TRUST:
                     var allowTrustOperation = (AllowTrustOperationResponse) operationResponse;
                     typeLabel.text = "Allow Trust";
                     detailsLabel.text = string.Concat ("");
-                    dateLabel.text = DateTime.Parse (transactionResponse.CreatedAt).ToShortDateString ();
+                    dateLabel.text = GetDateFormatted(transactionResponse.CreatedAt);
                     break;
 
                 case OperationType.CHANGE_TRUST:
                     var changeTrustOperation = (ChangeTrustOperationResponse) operationResponse;
                     typeLabel.text = "Change Trust";
                     detailsLabel.text = string.Concat ("");
-                    dateLabel.text = transactionResponse.CreatedAt;
+                    dateLabel.text = GetDateFormatted(transactionResponse.CreatedAt);
                     break;
 
                 case OperationType.CREATE_ACCOUNT:
                     var createAccountOperation = (CreateAccountOperationResponse) operationResponse;
                     typeLabel.text = "Create Account";
-                    detailsLabel.text = string.Concat ("Starting Balance ➟ ", createAccountOperation.StartingBalance);
-                    dateLabel.text = transactionResponse.CreatedAt;
+                    amountLabel.text = string.Concat("-", createAccountOperation.StartingBalance, " XLM");
+                    detailsLabel.text = string.Concat (UStellarUtils.ShortAddress(createAccountOperation.Account.AccountId));
+                    dateLabel.text = GetDateFormatted(transactionResponse.CreatedAt);
                     break;
 
                 case OperationType.CREATE_PASSIVE_OFFER:
                     var createPassiveOfferOperation = (CreatePassiveOfferOperationResponse) operationResponse;
                     typeLabel.text = "Create Passive Offer";
                     detailsLabel.text = string.Concat ("");
-                    dateLabel.text = transactionResponse.CreatedAt;
+                    dateLabel.text = GetDateFormatted(transactionResponse.CreatedAt);
                     break;
 
                 case OperationType.INFLATION:
                     var inflationOperation = (InflationOperationResponse) operationResponse;
                     typeLabel.text = "Set Inflation";
                     detailsLabel.text = string.Concat ("");
-                    dateLabel.text = transactionResponse.CreatedAt;
+                    dateLabel.text = GetDateFormatted(transactionResponse.CreatedAt);
                     break;
 
                 case OperationType.MANAGE_DATA:
                     var manageDataOperation = (ManageDataOperationResponse) operationResponse;
                     typeLabel.text = "Manage Data";
                     detailsLabel.text = string.Concat ("");
-                    dateLabel.text = transactionResponse.CreatedAt;
+                    dateLabel.text = GetDateFormatted(transactionResponse.CreatedAt);
                     break;
 
                 case OperationType.MANAGE_OFFER:
                     var manageOfferOperation = (ManageOfferOperationResponse) operationResponse;
                     typeLabel.text = "Manage Offer";
                     detailsLabel.text = string.Concat ("");
-                    dateLabel.text = transactionResponse.CreatedAt;
+                    dateLabel.text = GetDateFormatted(transactionResponse.CreatedAt);
                     break;
 
                 case OperationType.PATH_PAYMENT:
                     var pathPaymentOperation = (PathPaymentOperationResponse) operationResponse;
                     typeLabel.text = "Path Payment";
                     detailsLabel.text = string.Concat ("");
-                    dateLabel.text = transactionResponse.CreatedAt;
+                    dateLabel.text = GetDateFormatted(transactionResponse.CreatedAt);
                     break;
 
                 case OperationType.PAYMENT:
@@ -145,14 +146,13 @@ namespace AccountViewer.UI.Operations {
                     var setOptionsOperation = (SetOptionsOperationResponse) operationResponse;
                     typeLabel.text = "Set Options";
                     detailsLabel.text = string.Concat ("");
-                    dateLabel.text = transactionResponse.CreatedAt;
-                    break;
+                    dateLabel.text = GetDateFormatted(transactionResponse.CreatedAt);                    break;
             }
         }
 
         private string GetDateFormatted(string date) 
         {
-            DateTime dateTime = DateTime.Parse(date);
+            DateTime dateTime = UStellarUtils.FormatDate(date);
             string day = dateTime.Day.ToString();
             string month = "";
 
