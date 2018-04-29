@@ -15,13 +15,10 @@ namespace AccountViewer.UI.Operations
     {
         public Transform contentParent;
         public GameObject operationPrefab;
-
-        private MainController mainController;
         private Dictionary<long, UIOperation> operations = new Dictionary<long, UIOperation>();
 
         protected override void Setup() 
         {
-            mainController = UIController.GetInstance().mainController;
             mainController.accounts.OnSetAccount += OnSetAccount;
             mainController.operations.OnAddOperation += OnAddOperation;
         }
@@ -45,8 +42,10 @@ namespace AccountViewer.UI.Operations
         {
             //Instantiate Prefab
             GameObject operationInstance = Instantiate(operationPrefab);
+            operationInstance.name = transaction.CreatedAt;
             operationInstance.transform.SetParent(contentParent, false);
-
+            operationInstance.transform.SetAsLastSibling();
+            
             //Set Data
             UIOperation uiOperation = operationInstance.GetComponent<UIOperation>();
             uiOperation.Setup(operation.Id, transaction, operation);

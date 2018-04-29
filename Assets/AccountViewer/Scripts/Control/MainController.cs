@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UStellar.Core;
-using stellar_dotnetcore_sdk;
 using AccountViewer.Controller.Accounts;
 using AccountViewer.Controller.Balances;
 using AccountViewer.Controller.Operations;
@@ -13,18 +11,16 @@ namespace AccountViewer.Controller
     public class MainController : MonoBehaviour
     {
         private static MainController instance;
-
+        
         public AccountsController accounts;
         public BalanceController balance;
-        public OperationsController operations;
+        public NetworksController networks;
         public TransactionsController transactions;
-        
-        public Server server;
+        public OperationsController operations;
 
         private void Awake()
         {
             SetInstance();
-            InitStellarSDK();
         }
 
         public static MainController GetInstance()
@@ -45,10 +41,11 @@ namespace AccountViewer.Controller
             }
         }
 
-        private void InitStellarSDK()
+        void Start() 
         {
-            UStellarManager.Init();
-            server = UStellarManager.GetServer();
+            UStellar.Core.UStellarManager.SetStellarTestNetwork();
+            UStellar.Core.UStellarManager.Init();
+            networks.server = UStellar.Core.UStellarManager.GetServer();
         }
     }
 }

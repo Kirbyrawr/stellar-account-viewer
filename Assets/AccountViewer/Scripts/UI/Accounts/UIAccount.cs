@@ -27,11 +27,23 @@ namespace AccountViewer.UI.Accounts
             addressLabel.text = account.address;
         }
 
+        public void Refresh() 
+        {
+            nameLabel.text = account.name;
+            addressLabel.text = account.address;
+        }
+
         //Called from Scene
         public void OnClick()
         {
             controller.mainController.accounts.SetAccount(account);
             accountsList.CloseList();
+        }
+
+        public void OnClickEdit() 
+        {
+            UIAccountInput accountInput = UIController.GetInstance().GetModule<UIAccountInput>();
+            accountInput.EditAccount(account);
         }
     }
 }

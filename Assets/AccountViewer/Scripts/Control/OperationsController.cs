@@ -30,7 +30,7 @@ namespace AccountViewer.Controller.Operations
     {
         public System.Action<TransactionResponse, OperationResponse> OnAddOperation;
 
-        private MainController mainController;
+        private MainController main;
         private Dictionary<string, OperationResponse> operations = new Dictionary<string, OperationResponse>();
 
         public void Start()
@@ -40,14 +40,14 @@ namespace AccountViewer.Controller.Operations
 
         private void Setup()
         {
-            mainController = MainController.GetInstance();
+            main = MainController.GetInstance();
             SubscribeEvents();
         }
 
         private void SubscribeEvents()
         {
-            mainController.accounts.OnSetAccount += OnSetAccount;
-            mainController.transactions.OnAddTransaction += OnAddTransaction;
+            main.accounts.OnSetAccount += OnSetAccount;
+            main.transactions.OnAddTransaction += OnAddTransaction;
         }
 
         private void OnSetAccount(AccountsController.Account account)
@@ -55,20 +55,23 @@ namespace AccountViewer.Controller.Operations
             operations.Clear();
         } 
 
-        private void OnAddTransaction(TransactionResponse response)
+        private void OnAddTransaction(List<TransactionResponse> responses)
         {
-            GetOperations(response);
+            GetOperations(responses);
         }
 
-        private async void GetOperations(TransactionResponse transactionResponse)
+        private async void GetOperations(List<TransactionResponse> transactionResponse)
         {
-            Page<OperationResponse> operationsPage = await mainController.server.Operations.ForTransaction(transactionResponse.Hash).Order(OrderDirection.ASC).Execute();
-
-            for (int i = 0; i < operationsPage.Records.Count; i++)
+            for (int i = 0; i < transactionResponse.Count; i++)
             {
-                if (OnAddOperation != null)
+                Page<OperationResponse> operationsPage = await main.networks.server.Operations.ForTransaction(transactionResponse[i].Hash).Order(OrderDirection.DESC).Execute();
+                
+                for (int r = 0; r < operationsPage.Records.Count; r++)
                 {
-                    OnAddOperation(transactionResponse, operationsPage.Records[i]);
+                    if (OnAddOperation != null)
+                    {
+                        OnAddOperation(transactionResponse[i], operationsPage.Records[r]);
+                    }
                 }
             }
         }
