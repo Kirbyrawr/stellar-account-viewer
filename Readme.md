@@ -1,7 +1,8 @@
 Description
 ---------------
-This repository contains an Account Viewer for Stellar.
-This project was/is going to be uploaded to Build Challenge of Stellar so please don't just copy it and submit it.
+This repository contains an Account Viewer for Stellar for show the capabilities of the SDK and for have a working product.
+
+It can't be submitted to the SBC without major modifications.
 
 Blog
 --------------
