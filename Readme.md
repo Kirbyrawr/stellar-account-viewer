@@ -4,13 +4,9 @@ This repository contains an Account Viewer for Stellar for show the capabilities
 
 It can't be submitted to the SBC without major modifications.
 
-Blog
+Requeriments
 --------------
-https://stellaru.wordpress.com/
-
-Releases
---------------
-https://github.com/Kirbyrawr/stellar-account-viewer/releases
+Unity 2018.2.0b1 and forward
 
 Roadmap
 --------------
