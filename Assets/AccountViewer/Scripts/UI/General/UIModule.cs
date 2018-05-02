@@ -9,11 +9,11 @@ namespace AccountViewer.UI
 {
     public abstract class UIModule : MonoBehaviour
     {	
-		protected UIController uiController;
 		public Image transparency;
 
-		protected const float animationSpeed = 0.4f;
 		protected MainController mainController;
+		protected UIController uiController;
+		protected const float animationSpeed = 0.4f;
 
 		private void Start() 
 		{

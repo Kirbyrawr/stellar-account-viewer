@@ -8,6 +8,7 @@ using stellar_dotnetcore_sdk.responses;
 using AccountViewer.Controller;
 using AccountViewer.Controller.Accounts;
 using AccountViewer.Controller.Operations;
+using UnityEngine.UI;
 
 namespace AccountViewer.UI.Operations
 {
@@ -15,6 +16,8 @@ namespace AccountViewer.UI.Operations
     {
         public Transform contentParent;
         public GameObject operationPrefab;
+        public ScrollRect operationsScroll;
+        
         private Dictionary<long, UIOperation> operations = new Dictionary<long, UIOperation>();
 
         protected override void Setup() 
@@ -52,6 +55,16 @@ namespace AccountViewer.UI.Operations
 
             //Add this to the dictionary
             operations.Add(operation.Id, uiOperation);
+        }
+
+        public void OnScrollValueChange(Vector2 position) 
+        {
+            //Load more operations
+            if(!mainController.transactions.IsLoadingTransactions() && !mainController.operations.IsLoadingOperations() && position.y <= 0) 
+            {
+                mainController.transactions.LoadTransactions(mainController.accounts.currentAccount, 5);
+                Debug.Log("Loading more transactions");
+            }
         }
     }
 }

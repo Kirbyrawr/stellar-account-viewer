@@ -31,7 +31,8 @@ namespace AccountViewer.Controller.Operations
         public System.Action<TransactionResponse, OperationResponse> OnAddOperation;
 
         private MainController main;
-        private Dictionary<string, OperationResponse> operations = new Dictionary<string, OperationResponse>();
+        private SortedDictionary<string, OperationResponse> operations = new SortedDictionary<string, OperationResponse>();
+        private bool m_loadingOperations = false;
 
         public void Start()
         {
@@ -47,7 +48,7 @@ namespace AccountViewer.Controller.Operations
         private void SubscribeEvents()
         {
             main.accounts.OnSetAccount += OnSetAccount;
-            main.transactions.OnAddTransaction += OnAddTransaction;
+            main.transactions.OnLoadTransactions += OnAddTransaction;
         }
 
         private void OnSetAccount(AccountsController.Account account)
@@ -62,6 +63,7 @@ namespace AccountViewer.Controller.Operations
 
         private async void GetOperations(List<TransactionResponse> transactionResponse)
         {
+            m_loadingOperations = true;
             for (int i = 0; i < transactionResponse.Count; i++)
             {
                 Page<OperationResponse> operationsPage = await main.networks.server.Operations.ForTransaction(transactionResponse[i].Hash).Order(OrderDirection.DESC).Execute();
@@ -74,20 +76,12 @@ namespace AccountViewer.Controller.Operations
                     }
                 }
             }
+            m_loadingOperations = false;
         }
 
-        public T GetOperations<T>(int page) where T : OperationResponse
+        public bool IsLoadingOperations() 
         {
-            foreach (var pair in operations)
-            {
-                Type type = GetOperationResponseType(pair.Value);
-                if (type == typeof(T))
-                {
-                    return (T)pair.Value;
-                }
-            }
-
-            return null;
+            return m_loadingOperations;
         }
 
         public OperationType GetOperationResponseOperationType(OperationResponse operationResponse)

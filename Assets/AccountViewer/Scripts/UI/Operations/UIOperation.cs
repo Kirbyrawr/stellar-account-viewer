@@ -139,6 +139,7 @@ namespace AccountViewer.UI.Operations {
                     {
                         amountLabel.text = string.Concat (paymentOperation.Amount, " ", paymentOperation.AssetCode);
                     }
+                    detailsLabel.text = string.Concat (UStellarUtils.ShortAddress(paymentOperation.To.AccountId));
                     dateLabel.text = GetDateFormatted(transactionResponse.CreatedAt);
                     break;
 
@@ -146,7 +147,8 @@ namespace AccountViewer.UI.Operations {
                     var setOptionsOperation = (SetOptionsOperationResponse) operationResponse;
                     typeLabel.text = "Set Options";
                     detailsLabel.text = string.Concat ("");
-                    dateLabel.text = GetDateFormatted(transactionResponse.CreatedAt);                    break;
+                    dateLabel.text = GetDateFormatted(transactionResponse.CreatedAt);                    
+                    break;
             }
         }
 
